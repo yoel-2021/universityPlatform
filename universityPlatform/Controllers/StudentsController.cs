@@ -9,7 +9,7 @@ using universityPlatform.Models.dataAccess;
 using universityPlatform.dataAccess;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using universityPlatform.Models.DTO;
+using universityPlatform.DTO;
 
 namespace universityPlatform.Controllers
 {
@@ -28,39 +28,21 @@ namespace universityPlatform.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Students>>> GetStudent()
         {
+
             if (_context.Student == null)
             {
                 return NotFound();
             }
-            return await _context.Student.ToListAsync();
+            return await _context.Student.Include(c=> c.courses).ToListAsync();
+
         }
-        /*public IQueryable<StudentDto> GetBooks()
-        {
-           
-            var students = from b in _context.Student
-                           select new StudentDto()
-                           {
-                               id = b.id,
-                               name = b.name,
-                               lastName = b.lastName,
-                               birthday = b.birthday,
-                               email = b.email,
-                               
-                               
-                     
-
-                        };
-           
-
-            return students;
-        }*/
-
-
-
+      
         // GET: api/Students/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Students>> GetStudents(int id)
         {
+
+            
           if (_context.Student == null)
           {
               return NotFound();
@@ -80,7 +62,7 @@ namespace universityPlatform.Controllers
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         public async Task<IActionResult> PutStudents(int id, Students students)
         {
             if (id != students.id)
@@ -112,22 +94,56 @@ namespace universityPlatform.Controllers
         // POST: api/Students
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
-        public async Task<ActionResult<Students>> PostStudents(Students students)
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
+        public async Task<ActionResult<Students>> PostStudents(CreationStudentDTOcs students)
         {
           if (_context.Student == null)
           {
               return Problem("Entity set 'UniversityContext.Student'  is null.");
           }
-            _context.Student.Add(students);
+
+            var newStudent = new Students
+            {   id = students.id,
+                name= students.name,
+                birthday= students.birthday,
+                lastName= students.lastName,
+                email= students.email,
+                city= students.city,
+                street = students.street,
+                community = students.community,
+                country = students.country,
+                zipCode = students.zipCode
+
+            };
+            _context.Student.Add(newStudent);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetStudents", new { id = students.id }, students);
         }
 
+        [HttpPost("Courses")]
+        public async Task<ActionResult<Students>> AddCourseStudent(AddStudentCourseDTO courses)
+        {
+            var Student = await _context.Student.Where(c => c.id == courses.coursesid)
+                                                   .Include(c => c.courses)
+                                                   .FirstOrDefaultAsync();
+            if (Student == null)
+                return NotFound();
+
+            var course = await _context.Course.FindAsync(courses.coursesid);
+
+            if (course == null)
+                return NotFound();
+            Student.courses.Add(course);
+            await _context.SaveChangesAsync();
+
+            return Student;
+        }
+
+
         // DELETE: api/Students/5
         [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         public async Task<IActionResult> DeleteStudents(int id)
         {
             if (_context.Student == null)

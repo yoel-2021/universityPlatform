@@ -1,17 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace universityPlatform.Models.dataAccess
-{   
+{
+    
     public class Courses:BaseEntity
-    {   [Required]
+    {   
+        [Key]
         public int id { get; set; }
-        public string name { get; set; } = string.Empty;
+        public string name { get; set; } = "Ningún Curso Asociado";
         public string? index { get; set; }
-        
-        public int? studentsId { get; set; }
-        public int? categoriesId  { get; set; }
+      
+        public List<Category>? categories { get; set; }
+        public List<Students>? students { get; set; }
 
 
     }

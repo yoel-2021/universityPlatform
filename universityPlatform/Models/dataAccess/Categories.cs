@@ -1,13 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace universityPlatform.Models.dataAccess
 {
-    public class Categories:BaseEntity
+    
+    public class Category:BaseEntity
     {
-        [Required]
+        
+        [Key]
         public int id { get; set; }
-        public string categoryName { get; set; } = string.Empty;
+        public string categoryName { get; set; } = "Ninguna Categoria Asociada";
 
-        public int? coursesId { get; set; }
+        public List<Courses>?courses { get; set; }
+
     }
 }

@@ -1,4 +1,4 @@
-//1. Usings to work Entity Framework 
+﻿//1. Usings to work Entity Framework 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,9 +7,11 @@ using Microsoft.OpenApi.Models;
 //10. Using serilog to events
 using Serilog;
 using System.Text;
+using System.Text.Json.Serialization;
 using universityPlatform.dataAccess;
 using universityPlatform.Services;
 using universityPlatform.TokenCreation;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,10 +47,14 @@ builder.Services.AddScoped<IStudentsServices, StudentsServices>();
 //8.Add authorization
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("UserOnlyPolicy", policy => policy.RequireClaim("User", "Administrator"));
+    options.AddPolicy("UserOnlyPolicy", policy => policy.RequireClaim("User"));
+    options.AddPolicy("AdminPolicy", policy => policy.RequireClaim("Administrator"));
 
 });
 
+//ignoring cycles
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -87,14 +93,17 @@ builder.Services.AddSwaggerGen(options =>
 );
 
 
+
 // 5. CORS Configuration 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "CorsPolicy", builder =>
     {
+        
         builder.AllowAnyOrigin();
         builder.AllowAnyMethod();
         builder.AllowAnyHeader();
+        
     });
 
 });

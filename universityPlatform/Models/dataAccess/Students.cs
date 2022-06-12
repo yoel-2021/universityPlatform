@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace universityPlatform.Models.dataAccess
 {
+    
     public class Students : BaseEntity
     {
+        [Key]
         [Required]
         public int id { get; set; }
         [Required]
-        public string name { get; set; } = string.Empty;
+        public string name { get; set; } = "Ningún Studiante Asociado";
 
         [Required]
         public string lastName { get; set; } = string.Empty;
@@ -22,6 +25,7 @@ namespace universityPlatform.Models.dataAccess
         public string country { get; set; } = string.Empty;
         public int zipCode { get; set; }
 
-        public int? coursesId { get; set; }
+        public List<Courses>?courses { get; set; }
+        
     }
 }

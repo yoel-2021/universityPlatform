@@ -1,6 +1,6 @@
-﻿namespace universityPlatform.Models.DTO
+﻿namespace universityPlatform.DTO
 {
-    public class StudentDtoDetail
+    public class CreationStudentDTOcs
     {
         public int id { get; set; }
         public string name { get; set; } = string.Empty;
@@ -12,6 +12,6 @@
         public string community { get; set; } = string.Empty;
         public string country { get; set; } = string.Empty;
         public int zipCode { get; set; }
-        public string? cursosMatriculados { get; set; }
+
     }
 }

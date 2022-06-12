@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace universityPlatform.Migrations
 {
-    public partial class CreateStudentTable : Migration
+    public partial class Users : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -91,48 +91,47 @@ namespace universityPlatform.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoriesCourses",
+                name: "CategoryCourses",
                 columns: table => new
                 {
-                    categoriesId = table.Column<int>(type: "int", nullable: false),
-                    courseId = table.Column<int>(type: "int", nullable: false)
+                    categoriesid = table.Column<int>(type: "int", nullable: false),
+                    coursesid = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoriesCourses", x => new { x.courseId, x.categoriesId });
+                    table.PrimaryKey("PK_CategoryCourses", x => new { x.categoriesid, x.coursesid });
                     table.ForeignKey(
-                        name: "FK_CategoriesCourses_Category_categoriesId",
-                        column: x => x.categoriesId,
+                        name: "FK_CategoryCourses_Category_categoriesid",
+                        column: x => x.categoriesid,
                         principalTable: "Category",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CategoriesCourses_Course_courseId",
-                        column: x => x.courseId,
+                        name: "FK_CategoryCourses_Course_coursesid",
+                        column: x => x.coursesid,
                         principalTable: "Course",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentsCourses",
+                name: "CoursesStudents",
                 columns: table => new
                 {
-                    studentId = table.Column<int>(type: "int", nullable: false),
-                    coursesId = table.Column<int>(type: "int", nullable: false),
+                    coursesid = table.Column<int>(type: "int", nullable: false),
                     studentsid = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentsCourses", x => new { x.coursesId, x.studentId });
+                    table.PrimaryKey("PK_CoursesStudents", x => new { x.coursesid, x.studentsid });
                     table.ForeignKey(
-                        name: "FK_StudentsCourses_Course_coursesId",
-                        column: x => x.coursesId,
+                        name: "FK_CoursesStudents_Course_coursesid",
+                        column: x => x.coursesid,
                         principalTable: "Course",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentsCourses_Student_studentsid",
+                        name: "FK_CoursesStudents_Student_studentsid",
                         column: x => x.studentsid,
                         principalTable: "Student",
                         principalColumn: "id",
@@ -140,23 +139,23 @@ namespace universityPlatform.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoriesCourses_categoriesId",
-                table: "CategoriesCourses",
-                column: "categoriesId");
+                name: "IX_CategoryCourses_coursesid",
+                table: "CategoryCourses",
+                column: "coursesid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentsCourses_studentsid",
-                table: "StudentsCourses",
+                name: "IX_CoursesStudents_studentsid",
+                table: "CoursesStudents",
                 column: "studentsid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CategoriesCourses");
+                name: "CategoryCourses");
 
             migrationBuilder.DropTable(
-                name: "StudentsCourses");
+                name: "CoursesStudents");
 
             migrationBuilder.DropTable(
                 name: "User");

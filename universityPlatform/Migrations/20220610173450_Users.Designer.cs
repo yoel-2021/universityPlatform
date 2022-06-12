@@ -12,8 +12,8 @@ using universityPlatform.dataAccess;
 namespace universityPlatform.Migrations
 {
     [DbContext(typeof(UniversityContext))]
-    [Migration("20220603093400_initial2")]
-    partial class initial2
+    [Migration("20220610173450_Users")]
+    partial class Users
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,37 @@ namespace universityPlatform.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("universityPlatform.Models.dataAccess.Categories", b =>
+            modelBuilder.Entity("CategoryCourses", b =>
+                {
+                    b.Property<int>("categoriesid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("coursesid")
+                        .HasColumnType("int");
+
+                    b.HasKey("categoriesid", "coursesid");
+
+                    b.HasIndex("coursesid");
+
+                    b.ToTable("CategoryCourses");
+                });
+
+            modelBuilder.Entity("CoursesStudents", b =>
+                {
+                    b.Property<int>("coursesid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("studentsid")
+                        .HasColumnType("int");
+
+                    b.HasKey("coursesid", "studentsid");
+
+                    b.HasIndex("studentsid");
+
+                    b.ToTable("CoursesStudents");
+                });
+
+            modelBuilder.Entity("universityPlatform.Models.dataAccess.Category", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -35,9 +65,6 @@ namespace universityPlatform.Migrations
                     b.Property<string>("categoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("coursesId")
-                        .HasColumnType("int");
 
                     b.Property<string>("createBy")
                         .HasColumnType("nvarchar(max)");
@@ -64,9 +91,6 @@ namespace universityPlatform.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int?>("categoriesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("createBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -79,9 +103,6 @@ namespace universityPlatform.Migrations
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("studentsId")
-                        .HasColumnType("int");
 
                     b.Property<string>("updateBy")
                         .HasColumnType("nvarchar(max)");
@@ -116,9 +137,6 @@ namespace universityPlatform.Migrations
                     b.Property<string>("country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("coursesId")
-                        .HasColumnType("int");
 
                     b.Property<string>("createBy")
                         .HasColumnType("nvarchar(max)");
@@ -199,6 +217,36 @@ namespace universityPlatform.Migrations
                     b.HasKey("id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("CategoryCourses", b =>
+                {
+                    b.HasOne("universityPlatform.Models.dataAccess.Category", null)
+                        .WithMany()
+                        .HasForeignKey("categoriesid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("universityPlatform.Models.dataAccess.Courses", null)
+                        .WithMany()
+                        .HasForeignKey("coursesid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CoursesStudents", b =>
+                {
+                    b.HasOne("universityPlatform.Models.dataAccess.Courses", null)
+                        .WithMany()
+                        .HasForeignKey("coursesid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("universityPlatform.Models.dataAccess.Students", null)
+                        .WithMany()
+                        .HasForeignKey("studentsid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

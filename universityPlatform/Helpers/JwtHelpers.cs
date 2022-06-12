@@ -17,7 +17,7 @@ namespace universityPlatform.Helpers
                 new Claim(ClaimTypes.Name, userAccounts.UserName),
                 new Claim(ClaimTypes.Email, userAccounts.Email),
                 new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
-                //new Claim(ClaimTypes.Expiration, DateTime.UtcNow.AddMinutes(120).ToString("HH:mm: ss tt")) //.ToString("MMM ddd dd yyyy HH:mm: ss tt"))
+                new Claim(ClaimTypes.Expiration, DateTime.UtcNow.AddMinutes(120).ToString("dd/MM/yyyy HH:mm: ss tt")) //.ToString("MMM ddd dd yyyy HH:mm: ss tt"))
 
         };
             if (userAccounts.role == "Administrator")
@@ -27,7 +27,7 @@ namespace universityPlatform.Helpers
             else if (userAccounts.role == "User")
             {
                 claims.Add(new Claim(ClaimTypes.Role, "User"));
-                claims.Add(new Claim("UserOnly", "User 1"));
+                
             }
             return claims;
         }
@@ -75,7 +75,6 @@ namespace universityPlatform.Helpers
                 UserToken.UserName = model.UserName;
                 UserToken.Id = model.Id;
                 UserToken.GuidId = Id;
-                UserToken.role = model.role;
                 return UserToken;
 
             }

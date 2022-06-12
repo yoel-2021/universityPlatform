@@ -12,7 +12,7 @@ namespace universityPlatform.Models.dataAccess
         [Required]
         public string lastName { get; set; } = string.Empty;
 
-        [Required, EmailAddress]
+        [Required]
         public string email { get; set; } = string.Empty;
 
         [Required]

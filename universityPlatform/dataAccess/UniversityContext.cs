@@ -15,17 +15,18 @@ namespace universityPlatform.dataAccess
         // Add DbSets (Tables of our Data base)
         public DbSet<Users> User { get; set; }
         public DbSet<Courses> Course { get; set; }
-        public DbSet<Categories> Category { get; set; }
+        public DbSet<Category> Category { get; set; }
         public DbSet<Students> Student { get; set; }
-
+        
+    
 
         //para nuestra relacion de datos, varios con varios
-        /* protected  override void OnModelCreating(ModelBuilder modelBuilder)
+        /*protected  override void OnModelCreating(ModelBuilder modelBuilder)
          {
-             modelBuilder.Entity<StudentsCourses>().HasKey(x => new { x.coursesId, x.studentId });
-             modelBuilder.Entity<CategoriesCourses>().HasKey(x => new { x.courseId, x.categoriesId});
-         }
-        */
+             modelBuilder.Entity<StudentCourse>().HasKey(x => new { x.coursesId, x.studentId });
+             modelBuilder.Entity<CoursesCategories>().HasKey(x => new { x.coursebyId, x.categoriesbyId});
+        }*/
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var logger = _loggerFactory.CreateLogger<UniversityContext>();
